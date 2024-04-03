@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/article")
-public class Article {
+public class ArticleController {
     @GetMapping(value = "/listArticle")
     public Result listArticle(){
         return Result.success();

@@ -15,6 +15,21 @@ public interface UserMapper {
     @Select("SELECT * FROM user WHERE username = #{username} ")
     User findByUsername(String username);
 
+    /**
+     * 注册用户信息
+     * @param username
+     * @param password
+     * @param nickname
+     * @param email
+     */
     @Insert("INSERT INTO user(username, password, nickname, email) VALUES (#{username}, #{password}, #{nickname}, #{email})")
     void register(String username, String password, String nickname, String email);
+
+    /**
+     * 通过id获取用户信息
+     * @param id
+     * @return
+     */
+    @Select("SELECT * FROM user WHERE id = #{id}")
+    User userInfoById(Integer id);
 }

@@ -1,15 +1,15 @@
 package example.admin_backend.controller;
 
 import example.admin_backend.domain.User;
+import example.admin_backend.dto.UserDto;
 import example.admin_backend.service.UserService;
 import example.admin_backend.utils.Jwt;
 import example.admin_backend.utils.Result;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.crypto.interfaces.PBEKey;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,6 +53,12 @@ public class UserController {
         }
     }
 
+    /**
+     * 用户登录
+     * @param username
+     * @param password
+     * @return
+     */
     @PostMapping(value = "/login")
     public Result login(String username, String password){
         User loginUser = userService.findByUsername(username);
@@ -80,5 +86,21 @@ public class UserController {
         }else {
             return Result.error("Username and Password cannot be empty.");
         }
+    }
+
+    /**
+     * 获取用户信息，token中携带了username，从token中获取
+     * @param token 通过请求头携带的token
+     * @return
+     */
+    @GetMapping(value = "/userInfo")
+    public Result<UserDto> userInfo(@RequestHeader(name = "token") String token ){
+        //解析token，获取其中携带的参数
+        Map<String, Object> map = jwt.parseJwt(token);
+        //通过key值获取username
+        Integer id = (Integer) map.get("id");
+        //传入username获取用户对象的信息
+        UserDto userDto = userService.userInfoById(id);
+        return Result.success(userDto);
     }
 }
