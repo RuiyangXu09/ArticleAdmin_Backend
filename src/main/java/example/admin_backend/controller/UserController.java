@@ -127,4 +127,16 @@ public class UserController {
             return Result.error("Not your Information");
         }
     }
+
+    /**
+     * 更新用户头像，当调用阿里云oss完成上传时，返回一个url地址存储
+     * 注解@RequestParam表明需要从query中获取String数据
+     * @param avatarUrl
+     * @return
+     */
+    @PatchMapping(value = "/updateAvatar")
+    public Result updateAvatar(@RequestParam String avatarUrl){
+        userService.updateAvatar(avatarUrl);
+        return Result.success();
+    }
 }

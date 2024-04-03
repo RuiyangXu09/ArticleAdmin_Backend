@@ -4,9 +4,12 @@ import example.admin_backend.domain.User;
 import example.admin_backend.dto.UserDto;
 import example.admin_backend.mapper.UserMapper;
 import example.admin_backend.service.UserService;
+import example.admin_backend.utils.ThreadLocalUtils;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -47,5 +50,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUser(User user) {
         userMapper.updateUser(user);
+    }
+
+    @Override
+    public void updateAvatar(String avatarUrl) {
+        //通过ThreadLocal获取id，作为参数坐标传入sql
+        Map<String, Object> map = ThreadLocalUtils.get();
+        Integer id = (Integer) map.get("id");
+        //传入参数url和id
+        userMapper.updateAvatar(avatarUrl, id);
     }
 }

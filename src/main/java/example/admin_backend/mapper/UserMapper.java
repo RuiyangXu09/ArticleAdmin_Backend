@@ -40,4 +40,11 @@ public interface UserMapper {
      */
     @Update("UPDATE user SET nickname = #{nickname}, email = #{email} WHERE id = #{id}")
     void updateUser(User user);
+
+    /**
+     * 更新用户头像
+     * @param avatarUrl
+     */
+    @Update(("UPDATE user SET avatarUrl = #{avatarUrl} WHERE id = #{id}"))
+    void updateAvatar(String avatarUrl, Integer id);
 }
