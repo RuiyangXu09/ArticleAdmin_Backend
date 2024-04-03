@@ -3,6 +3,7 @@ package example.admin_backend.interceptor;
 import com.alibaba.fastjson.JSONObject;
 import example.admin_backend.utils.Jwt;
 import example.admin_backend.utils.Result;
+import example.admin_backend.utils.ThreadLocalUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,8 @@ public class LoginInterceptor implements HandlerInterceptor {
         try {
             //解析token
             Map<String, Object> claims = jwt.parseJwt(token);
+            //将业务数据token存入ThreadLocal中，存入的数据为map集合
+            ThreadLocalUtils.set(claims);
             //验证通过为true，放行
             return true;
         }catch (Exception e){
@@ -39,5 +42,19 @@ public class LoginInterceptor implements HandlerInterceptor {
             //未通过为false
             return false;
         }
+    }
+
+    /**
+     * 完成拦截请求后，移除ThreadLocal中的数据
+     * @param request
+     * @param response
+     * @param handler
+     * @param ex
+     * @throws Exception
+     */
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+        //移除ThreadLocal中的数据，防止内存泄露
+        ThreadLocalUtils.remove();
     }
 }

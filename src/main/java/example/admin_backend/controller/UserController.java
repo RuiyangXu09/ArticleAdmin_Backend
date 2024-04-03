@@ -5,6 +5,7 @@ import example.admin_backend.dto.UserDto;
 import example.admin_backend.service.UserService;
 import example.admin_backend.utils.Jwt;
 import example.admin_backend.utils.Result;
+import example.admin_backend.utils.ThreadLocalUtils;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -89,14 +90,13 @@ public class UserController {
     }
 
     /**
-     * 获取用户信息，token中携带了username，从token中获取
-     * @param token 通过请求头携带的token
+     * 获取用户信息，token中携带了username，从token中获取，通过ThreadLocal获取在拦截其中set完成的业务数据
      * @return
      */
-    @GetMapping(value = "/userInfo")
-    public Result<UserDto> userInfo(@RequestHeader(name = "token") String token ){
-        //解析token，获取其中携带的参数
-        Map<String, Object> map = jwt.parseJwt(token);
+    @GetMapping(value = "/userInfoById")
+    public Result<UserDto> userInfoById(){
+        //通过ThreadLocalUtils获取解析好的token数据，在拦截器中已经将解析好的token数据存入了ThreadLocal中
+        Map<String, Object> map = ThreadLocalUtils.get();
         //通过key值获取username
         Integer id = (Integer) map.get("id");
         //传入username获取用户对象的信息
