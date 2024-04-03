@@ -4,6 +4,7 @@ import example.admin_backend.domain.User;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 @Mapper
 public interface UserMapper {
@@ -32,4 +33,11 @@ public interface UserMapper {
      */
     @Select("SELECT * FROM user WHERE id = #{id}")
     User userInfoById(Integer id);
+
+    /**
+     * 更新用户信息
+     * @param user
+     */
+    @Update("UPDATE user SET nickname = #{nickname}, email = #{email} WHERE id = #{id}")
+    void updateUser(User user);
 }

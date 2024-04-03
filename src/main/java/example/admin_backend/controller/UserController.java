@@ -10,7 +10,6 @@ import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.crypto.interfaces.PBEKey;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -64,7 +63,7 @@ public class UserController {
     public Result login(String username, String password){
         User loginUser = userService.findByUsername(username);
         //检测用户名和密码是否为空
-        if (!username.isEmpty() && !password.isEmpty()){
+        if (username != null && !username.isEmpty() && password != null && !password.isEmpty()){
             if (loginUser != null){
                 //检测密码是否正确，是就返回true
                 boolean passwordMatched = BCrypt.checkpw(password, loginUser.getPassword());
@@ -102,5 +101,30 @@ public class UserController {
         //传入username获取用户对象的信息
         UserDto userDto = userService.userInfoById(id);
         return Result.success(userDto);
+    }
+
+    /**
+     * 更新用户信息，添加注解@RequestBody将json格式的请求数据转换为实体类对象
+     * @param user
+     * @return
+     */
+    @PutMapping(value = "/updateUser")
+    public Result<User> updateUser(@RequestBody User user){
+        //判断当前登录的用户id是否等于需要修改的用户的id，调用ThreadLocal中存储的id
+        Map<String, Object> map = ThreadLocalUtils.get();
+        //当前进程中登录的id
+        Integer loginId = (Integer) map.get("id");
+        //判断需要修改的用户的id是否等于当前进程的用户id
+        if (user.getId().equals(loginId)){
+            //判断用户的nickname不能为空
+            if (user.getNickname() != null && !user.getNickname().isEmpty()){
+                userService.updateUser(user);
+                return Result.success();
+            }else {
+                return Result.error("Nickname cannot be empty");
+            }
+        }else {
+            return Result.error("Not your Information");
+        }
     }
 }

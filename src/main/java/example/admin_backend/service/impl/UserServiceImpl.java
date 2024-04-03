@@ -43,4 +43,9 @@ public class UserServiceImpl implements UserService {
         //返回一个userDto类的对象
         return userDto;
     }
+
+    @Override
+    public void updateUser(User user) {
+        userMapper.updateUser(user);
+    }
 }
