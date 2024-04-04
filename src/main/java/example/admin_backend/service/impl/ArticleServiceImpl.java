@@ -54,4 +54,9 @@ public class ArticleServiceImpl implements ArticleService {
         article.setUpdateTime(LocalDateTime.now());
         articleMapper.updateArticle(article);
     }
+
+    @Override
+    public void deleteArticle(Integer id) {
+        articleMapper.deleteArticle(id);
+    }
 }

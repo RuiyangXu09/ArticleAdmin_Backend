@@ -30,4 +30,10 @@ public interface ArticleService {
      * @param article
      */
     void updateArticle(Article article);
+
+    /**
+     * 删除文章
+     * @param id 前端传递的id参数
+     */
+    void deleteArticle(Integer id);
 }

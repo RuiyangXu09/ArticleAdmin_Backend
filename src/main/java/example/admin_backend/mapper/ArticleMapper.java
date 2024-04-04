@@ -1,10 +1,7 @@
 package example.admin_backend.mapper;
 
 import example.admin_backend.domain.Article;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -48,4 +45,11 @@ public interface ArticleMapper {
      */
     @Update("UPDATE article SET title = #{title}, summary = #{summary}, cover_img = #{coverImg}, state = #{state}, update_time = #{updateTime} WHERE id = #{id}")
     void updateArticle(Article article);
+
+    /**
+     * 删除文章
+     * @param id
+     */
+    @Delete("DELETE FROM article WHERE id = #{id}")
+    void deleteArticle(Integer id);
 }

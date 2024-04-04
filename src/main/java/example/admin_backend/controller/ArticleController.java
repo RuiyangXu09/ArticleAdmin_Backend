@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Objects;
 
 @RestController
@@ -90,6 +89,26 @@ public class ArticleController {
             }
         }else {
             return Result.error("Title and Summary cannot be empty.");
+        }
+    }
+
+    /**
+     * 删除文章
+     * @param article 传入article对象中的getId的id值
+     * @return
+     */
+    @DeleteMapping(value = "/deleteArticle")
+    public Result deleteArticle(Article article){
+        //判断当前线程的id是否等于获取文章内容中创建者的id
+        Integer loginId = GetUserInfoUtils.getCurrentThreadLocalUserId();
+        //创建一个article对象，接收查询到的article的内容，包含创建者id
+        Article checkArticle = articleService.getArticleDetails(article.getId());
+        //判断当前进程的id是否等于需要删除文章的创建者的id
+        if (Objects.equals(checkArticle.getCreateUser(), loginId)){
+            articleService.deleteArticle(article.getId());
+            return Result.success();
+        }else {
+            return Result.error("Not your Information");
         }
     }
 }

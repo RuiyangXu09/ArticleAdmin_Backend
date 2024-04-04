@@ -106,7 +106,7 @@ public class CategoryController {
         Integer loginId = GetUserInfoUtils.getCurrentThreadLocalUserId();
         //创建一个Category对象来接收查询返回的数据，其中包含该分类的创建者的id，createUser的id，getCategoryDetails传入的id是前端输入的category.getId
         Category checkCategory = categoryService.getCategoryDetails(category.getId());
-
+        //判断当前进程的id是否等于需要删除的分类的创建者的id
         if (Objects.equals(checkCategory.getCreateUser(), loginId)){
             categoryService.deleteCategory(category.getId());
             return Result.success();
