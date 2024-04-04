@@ -1,6 +1,7 @@
 package example.admin_backend.service.impl;
 
 import example.admin_backend.domain.Article;
+import example.admin_backend.domain.Page;
 import example.admin_backend.mapper.ArticleMapper;
 import example.admin_backend.service.ArticleService;
 import example.admin_backend.utils.GetUserInfoUtils;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class ArticleServiceImpl implements ArticleService {
@@ -27,5 +29,17 @@ public class ArticleServiceImpl implements ArticleService {
         Integer loginId = GetUserInfoUtils.getCurrentThreadLocalUserId();
         article.setCreateUser(loginId);
         articleMapper.addArticle(article);
+    }
+
+    @Override
+    public Page<Article> pageArticleList(Integer page, Integer pageSize) {
+        //获取数据库中的总记录数
+        Integer totalRows = articleMapper.countRows();
+        //计算起始索引，(page - 1) * pageSize
+        Integer startIndex = (page - 1) *pageSize;
+        //创建一个list对象接收返回的数据，向sql语句的limits传递两个参数pageSize和startIndex
+        List<Article> articleList = articleMapper.pageArticleList(startIndex, pageSize);
+        //返回一个新的page对象，其中封装有总记录数totalRows和articleList的集合类型的总数据
+        return new Page<>(totalRows, articleList);
     }
 }

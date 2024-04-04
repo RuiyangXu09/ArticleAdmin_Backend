@@ -1,6 +1,7 @@
 package example.admin_backend.service;
 
 import example.admin_backend.domain.Article;
+import example.admin_backend.domain.Page;
 
 public interface ArticleService {
     /**
@@ -8,4 +9,12 @@ public interface ArticleService {
      * @param article
      */
     void addArticle(Article article);
+
+    /**
+     * 分页查询文章
+     * @param page
+     * @param pageSize
+     * @return
+     */
+    Page<Article> pageArticleList(Integer page, Integer pageSize);
 }
