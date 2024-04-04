@@ -4,6 +4,7 @@ import example.admin_backend.domain.Category;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -31,4 +32,11 @@ public interface CategoryMapper {
      */
     @Select("SELECT * FROM category WHERE id = #{id}")
     Category getCategoryDetails(Integer id);
+
+    /**
+     * 更新分类名
+     * @param category
+     */
+    @Update("UPDATE category SET category_name = #{categoryName} WHERE id = #{id}")
+    void updateCategory(Category category);
 }

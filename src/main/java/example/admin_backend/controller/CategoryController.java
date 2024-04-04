@@ -68,4 +68,30 @@ public class CategoryController {
         }
 
     }
+
+    /**
+     * 更新分类名
+     * @param category
+     * @return
+     */
+    @PutMapping(value = "/updateCategory")
+    public Result updateCategory(@RequestBody Category category){
+        //判断分类名是否为空
+        if (category.getCategoryName() != null && !category.getCategoryName().isEmpty()){
+            //获取当前进程的id
+            Map<String, Object> map = ThreadLocalUtils.get();
+            Integer loginId = (Integer) map.get("id");
+            //创建一个Category对象来接收查询返回的数据，其中包含该分类的创建者的id，createUser的id，getCategoryDetails传入的id是前端输入的category.getId
+            Category checkCategory = categoryService.getCategoryDetails(category.getId());
+            //判断，分类创建者的id是否等于当前线程的id
+            if (Objects.equals(checkCategory.getCreateUser(), loginId)){
+                categoryService.updateCategory(category);
+                return Result.success();
+            }else {
+                return Result.error("Not your Information.");
+            }
+        }else {
+            return Result.error("Category name cannot be empty.");
+        }
+    }
 }

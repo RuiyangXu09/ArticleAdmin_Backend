@@ -41,4 +41,9 @@ public class CategoryServiceImpl implements CategoryService {
     public Category getCategoryDetails(Integer id) {
         return categoryMapper.getCategoryDetails(id);
     }
+
+    @Override
+    public void updateCategory(Category category) {
+        categoryMapper.updateCategory(category);
+    }
 }
