@@ -42,4 +42,9 @@ public class ArticleServiceImpl implements ArticleService {
         //返回一个新的page对象，其中封装有总记录数totalRows和articleList的集合类型的总数据
         return new Page<>(totalRows, articleList);
     }
+
+    @Override
+    public Article getArticleDetails(Integer id) {
+        return articleMapper.getArticleDetails(id);
+    }
 }

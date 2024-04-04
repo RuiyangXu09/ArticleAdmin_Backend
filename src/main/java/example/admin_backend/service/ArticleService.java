@@ -17,4 +17,11 @@ public interface ArticleService {
      * @return
      */
     Page<Article> pageArticleList(Integer page, Integer pageSize);
+
+    /**
+     * 获取文章信息
+     * @param id
+     * @return
+     */
+    Article getArticleDetails(Integer id);
 }

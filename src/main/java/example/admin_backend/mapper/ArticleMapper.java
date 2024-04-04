@@ -32,4 +32,12 @@ public interface ArticleMapper {
      */
     @Select("SELECT * FROM article LIMIT #{startIndex}, #{pageSize}")
     List<Article> pageArticleList(Integer startIndex, Integer pageSize);
+
+    /**
+     * 获取文章信息
+     * @param id 传入的id
+     * @return
+     */
+    @Select("SELECT * FROM article WHERE id = #{id}")
+    Article getArticleDetails(Integer id);
 }
