@@ -139,4 +139,14 @@ public class UserController {
         userService.updateAvatar(avatarUrl);
         return Result.success();
     }
+
+    /**
+     * 修改用户密码，以json格式传入
+     * @return
+     */
+    @PatchMapping(value = "/updatePassword")
+    public Result updatePassword(@RequestParam String password){
+        //TODO 考虑使用邮箱验证码完成修改密码的校验
+        return Result.success();
+    }
 }
