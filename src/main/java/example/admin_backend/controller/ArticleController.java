@@ -57,7 +57,7 @@ public class ArticleController {
      * @return 返回一个article对象
      */
     @GetMapping(value = "/getArticleDetails")
-    public Result getArticleDetails(Integer id){
+    public Result<Article> getArticleDetails(Integer id){
         //判断当前线程的id是否等于获取文章内容中创建者的id
         Integer loginId = GetUserInfoUtils.getCurrentThreadLocalUserId();
         //创建一个article对象，接收查询到的article的内容，包含创建者id
@@ -67,6 +67,29 @@ public class ArticleController {
             return Result.success(article);
         }else {
             return Result.error("Not your Information");
+        }
+    }
+
+    /**
+     * 修改文章信息
+     * @param article 前端传入json格式的信息，注解@RequestBody转换为article类型的对象
+     * @return
+     */
+    @PutMapping(value = "/updateArticle")
+    public Result updateArticle(@RequestBody Article article){
+        if (StringUtils.isNotBlank(article.getTitle()) && StringUtils.isNotBlank(article.getSummary())){
+            //判断当前线程的id是否等于获取文章内容中创建者的id
+            Integer loginId = GetUserInfoUtils.getCurrentThreadLocalUserId();
+            //创建一个article对象，接收查询到的article的内容，包含创建者id
+            Article checkArticle = articleService.getArticleDetails(article.getId());
+            if (Objects.equals(checkArticle.getCreateUser(), loginId)){
+                articleService.updateArticle(article);
+                return Result.success();
+            }else {
+                return Result.error("Not your Information");
+            }
+        }else {
+            return Result.error("Title and Summary cannot be empty.");
         }
     }
 }

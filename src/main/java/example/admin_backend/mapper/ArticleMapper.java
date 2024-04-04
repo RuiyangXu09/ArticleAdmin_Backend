@@ -4,6 +4,7 @@ import example.admin_backend.domain.Article;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -40,4 +41,11 @@ public interface ArticleMapper {
      */
     @Select("SELECT * FROM article WHERE id = #{id}")
     Article getArticleDetails(Integer id);
+
+    /**
+     * 修改文章信息
+     * @param article
+     */
+    @Update("UPDATE article SET title = #{title}, summary = #{summary}, cover_img = #{coverImg}, state = #{state}, update_time = #{updateTime} WHERE id = #{id}")
+    void updateArticle(Article article);
 }

@@ -24,4 +24,10 @@ public interface ArticleService {
      * @return
      */
     Article getArticleDetails(Integer id);
+
+    /**
+     * 修改文章信息
+     * @param article
+     */
+    void updateArticle(Article article);
 }

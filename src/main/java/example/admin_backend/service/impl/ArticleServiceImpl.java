@@ -47,4 +47,11 @@ public class ArticleServiceImpl implements ArticleService {
     public Article getArticleDetails(Integer id) {
         return articleMapper.getArticleDetails(id);
     }
+
+    @Override
+    public void updateArticle(Article article) {
+        //设置修改时间
+        article.setUpdateTime(LocalDateTime.now());
+        articleMapper.updateArticle(article);
+    }
 }
