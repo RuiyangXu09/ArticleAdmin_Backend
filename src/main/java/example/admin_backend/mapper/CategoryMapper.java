@@ -1,10 +1,7 @@
 package example.admin_backend.mapper;
 
 import example.admin_backend.domain.Category;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -39,4 +36,7 @@ public interface CategoryMapper {
      */
     @Update("UPDATE category SET category_name = #{categoryName} WHERE id = #{id}")
     void updateCategory(Category category);
+
+    @Delete("DELETE FROM category WHERE id = #{id}")
+    void deleteCategory(Integer id);
 }
