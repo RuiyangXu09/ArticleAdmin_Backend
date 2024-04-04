@@ -4,10 +4,9 @@ import example.admin_backend.domain.Category;
 import example.admin_backend.service.CategoryService;
 import example.admin_backend.utils.Result;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/category")
@@ -31,5 +30,15 @@ public class CategoryController {
         }else {
             return Result.error("category name cannot be empty.");
         }
+    }
+
+    /**
+     * 分类列表查询
+     * @return 返回一个list集合类型的数据
+     */
+    @GetMapping(value = "/getCategory")
+    public Result<List<Category>> getCategory(){
+        List<Category> categoryList = categoryService.getCategory();
+        return Result.success(categoryList);
     }
 }

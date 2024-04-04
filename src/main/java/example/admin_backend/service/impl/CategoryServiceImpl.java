@@ -7,6 +7,7 @@ import example.admin_backend.utils.ThreadLocalUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -25,5 +26,14 @@ public class CategoryServiceImpl implements CategoryService {
         category.setCreateUser(userId);
 
         categoryMapper.addCategory(category);
+    }
+
+    @Override
+    public List<Category> getCategory() {
+        //仅查询当前登录id下创建的category，获取ThreadLocal中的id
+        Map<String, Object> map = ThreadLocalUtils.get();
+        Integer userId = (Integer) map.get("id");
+        //传入一个userId，在sql中作为参数查询属于当前id的数据
+        return categoryMapper.getCategory(userId);
     }
 }
