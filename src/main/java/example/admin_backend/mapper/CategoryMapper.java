@@ -22,5 +22,13 @@ public interface CategoryMapper {
      * @return
      */
     @Select("SELECT * FROM category WHERE create_user = #{userId}")
-    List<Category> getCategory(Integer userId);
+    List<Category> getCategoryList(Integer userId);
+
+    /**
+     * 根据id获取分类详情
+     * @param id
+     * @return
+     */
+    @Select("SELECT * FROM category WHERE id = #{id}")
+    Category getCategoryDetails(Integer id);
 }

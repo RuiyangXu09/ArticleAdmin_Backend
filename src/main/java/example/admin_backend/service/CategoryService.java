@@ -15,5 +15,12 @@ public interface CategoryService {
      * 分类列表查询
      * @return
      */
-    List<Category> getCategory();
+    List<Category> getCategoryList();
+
+    /**
+     * 根据id获取分类详情
+     * @param id
+     * @return
+     */
+    Category getCategoryDetails(Integer id);
 }

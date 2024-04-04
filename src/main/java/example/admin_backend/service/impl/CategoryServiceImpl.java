@@ -29,11 +29,16 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<Category> getCategory() {
+    public List<Category> getCategoryList() {
         //仅查询当前登录id下创建的category，获取ThreadLocal中的id
         Map<String, Object> map = ThreadLocalUtils.get();
         Integer userId = (Integer) map.get("id");
         //传入一个userId，在sql中作为参数查询属于当前id的数据
-        return categoryMapper.getCategory(userId);
+        return categoryMapper.getCategoryList(userId);
+    }
+
+    @Override
+    public Category getCategoryDetails(Integer id) {
+        return categoryMapper.getCategoryDetails(id);
     }
 }
