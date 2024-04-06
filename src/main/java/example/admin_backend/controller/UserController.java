@@ -9,10 +9,14 @@ import example.admin_backend.utils.ThreadLocalUtils;
 import io.micrometer.common.util.StringUtils;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisOperations;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping(value = "/user")
@@ -27,6 +31,11 @@ public class UserController {
      */
     @Autowired
     private Jwt jwt;
+    /**
+     * 引入redis的bean存放token
+     */
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
 
     /**
      * 用户注册并检查是否有重复的用户名
@@ -78,6 +87,16 @@ public class UserController {
                     claims.put("avatarUrl", loginUser.getAvatarUrl());
                     claims.put("email", loginUser.getEmail());
                     String token = jwt.generateJwt(claims);
+                    /*
+                    此时在这里应该将token设置到redis中，token作为键值对同时存入
+                    当用户修改密码时应该重新登录获取新的token，同时在拦截器验证携带的token并寻找redis中存放的token
+                    需要同时获取到之前存在redis中的token，获取不到就是失效
+                    用户修改密码成功后，需要删除存放在redis中的旧token
+                     */
+                    //引入redis
+                    ValueOperations<String, String> operations = stringRedisTemplate.opsForValue();
+                    //将token作为key和value同时存入，之后获取的token只需要比对同样的键能不能获取到对应的值就可以判断token有没有失效，同时设置过期时间，防止redis中数据过多
+                    operations.set(token, token, 3, TimeUnit.DAYS);
                     //返回一个token
                     return Result.success(token);
                 }else {
@@ -147,13 +166,19 @@ public class UserController {
     /**
      * 修改用户密码
      * 注解@RequestParam表明需要从query中获取String数据
+     * 注解@RequestHeader String token此时请求头中已经包含了token
      * @return
      */
     @PatchMapping(value = "/updatePassword")
-    public Result updatePassword(String password){
+    public Result updatePassword(String password, @RequestHeader("token") String token){
         //TODO 考虑使用邮箱验证码完成修改密码的校验
         if (StringUtils.isNotBlank(password)){
             userService.updatePassword(password);
+            //当密码更新成功后，应该删除之前存放在redis中的token
+            ValueOperations<String, String> operations = stringRedisTemplate.opsForValue();
+            //链式调用，delete方法删除token
+            operations.getOperations().delete(token);
+            //修改成功的响应
             return Result.success();
         }else {
             return Result.error("Password cannot be empty.");

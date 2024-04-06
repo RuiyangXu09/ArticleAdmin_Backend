@@ -4,9 +4,12 @@ import com.alibaba.fastjson.JSONObject;
 import example.admin_backend.utils.Jwt;
 import example.admin_backend.utils.Result;
 import example.admin_backend.utils.ThreadLocalUtils;
+import io.micrometer.common.util.StringUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -19,6 +22,12 @@ public class LoginInterceptor implements HandlerInterceptor {
      */
     @Autowired
     private Jwt jwt;
+    /**
+     * 注入redis的bean
+     */
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
+
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -26,6 +35,14 @@ public class LoginInterceptor implements HandlerInterceptor {
         String token = request.getHeader("token");
         //验证token
         try {
+            //从redis中获取token
+            ValueOperations<String, String> operations = stringRedisTemplate.opsForValue();
+            //通过get方法获取对应的token，此时键值就是用户登陆时的token，获取到的token赋值给一个变量
+            String redisToken = operations.get(token);
+            //判断此变量redisToken是否为空，为空，就return一个false拦截
+            if (StringUtils.isEmpty(redisToken)){
+               throw new RuntimeException();
+            }
             //解析token
             Map<String, Object> claims = jwt.parseJwt(token);
             //将业务数据token存入ThreadLocal中，存入的数据为map集合
