@@ -5,6 +5,7 @@ import example.admin_backend.service.CategoryService;
 import example.admin_backend.utils.GetUserInfoUtils;
 import example.admin_backend.utils.Result;
 import example.admin_backend.utils.ThreadLocalUtils;
+import io.micrometer.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,11 +29,11 @@ public class CategoryController {
      */
     @PostMapping(value = "/addCategory")
     public Result<Category> addCategory(@RequestBody Category category){
-        if (category.getCategoryName() != null && !category.getCategoryName().isEmpty()){
+        if (StringUtils.isNotBlank(category.getCategoryName())){
             categoryService.addCategory(category);
             return Result.success();
         }else {
-            return Result.error("category name cannot be empty.");
+            return Result.error("Category name cannot be empty.");
         }
     }
 
@@ -77,7 +78,7 @@ public class CategoryController {
     @PutMapping(value = "/updateCategory")
     public Result updateCategory(@RequestBody Category category){
         //判断分类名是否为空
-        if (category.getCategoryName() != null && !category.getCategoryName().isEmpty()){
+        if (StringUtils.isNotBlank(category.getCategoryName())){
             //获取当前进程的id
             Map<String, Object> map = ThreadLocalUtils.get();
             Integer loginId = (Integer) map.get("id");

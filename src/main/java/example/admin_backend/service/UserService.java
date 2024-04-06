@@ -36,4 +36,10 @@ public interface UserService {
      * @param avatarUrl
      */
     void updateAvatar(String avatarUrl);
+
+    /**
+     * 更新用户密码
+     * @param password
+     */
+    void updatePassword(String password);
 }

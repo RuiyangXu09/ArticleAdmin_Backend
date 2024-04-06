@@ -60,4 +60,14 @@ public class UserServiceImpl implements UserService {
         //传入参数url和id
         userMapper.updateAvatar(avatarUrl, id);
     }
+
+    @Override
+    public void updatePassword(String password) {
+        //通过ThreadLocal获取id，作为参数坐标传入sql
+        Map<String, Object> map = ThreadLocalUtils.get();
+        Integer id = (Integer) map.get("id");
+        //加密密码
+        password = BCrypt.hashpw(password, BCrypt.gensalt());
+        userMapper.updatePassword(password, id);
+    }
 }

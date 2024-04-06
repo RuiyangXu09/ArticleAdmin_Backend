@@ -21,7 +21,7 @@ public class UploadController {
 
     /**
      * 上传用户头像
-     * @param avatar 用户头像
+     * @param file 用户头像
      * @return 返回一个阿里云oss中文件的url地址
      * @throws IOException
      * @throws ClientException
@@ -32,6 +32,13 @@ public class UploadController {
         return Result.success(avatarUrl);
     }
 
+    /**
+     * 上传文章封面图
+     * @param file 封面图
+     * @return 返回一个阿里云oss中文件的url地址
+     * @throws IOException
+     * @throws ClientException
+     */
     @PostMapping(value = "/coverImg")
     public Result<String> uploadCoverImg(MultipartFile file) throws IOException, ClientException{
         String coverImgUrl = aliyunOss.uploadCoverImg(file);

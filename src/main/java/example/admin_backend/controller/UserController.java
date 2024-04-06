@@ -6,6 +6,7 @@ import example.admin_backend.service.UserService;
 import example.admin_backend.utils.Jwt;
 import example.admin_backend.utils.Result;
 import example.admin_backend.utils.ThreadLocalUtils;
+import io.micrometer.common.util.StringUtils;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -38,7 +39,7 @@ public class UserController {
         //检测用户名是否重复
         User user = userService.findByUsername(username);
         //检测用户名和密码是否为空
-        if (!username.isEmpty() && !password.isEmpty()){
+        if (StringUtils.isNotBlank(username) && StringUtils.isNotBlank(password)){
             if (user != null){
                 //如果username重复，返回一个error
                 return Result.error("Username is duplicated.");
@@ -63,7 +64,7 @@ public class UserController {
     public Result login(String username, String password){
         User loginUser = userService.findByUsername(username);
         //检测用户名和密码是否为空
-        if (username != null && !username.isEmpty() && password != null && !password.isEmpty()){
+        if (StringUtils.isNotBlank(username) && StringUtils.isNotBlank(password)){
             if (loginUser != null){
                 //检测密码是否正确，是就返回true
                 boolean passwordMatched = BCrypt.checkpw(password, loginUser.getPassword());
@@ -117,7 +118,7 @@ public class UserController {
         //判断需要修改的用户的id是否等于当前进程的用户id
         if (user.getId().equals(loginId)){
             //判断用户的nickname不能为空
-            if (user.getNickname() != null && !user.getNickname().isEmpty()){
+            if (StringUtils.isNotBlank(user.getNickname())){
                 userService.updateUser(user);
                 return Result.success();
             }else {
@@ -141,12 +142,19 @@ public class UserController {
     }
 
     /**
-     * 修改用户密码，以json格式传入
+     * 修改用户密码
+     * 注解@RequestParam表明需要从query中获取String数据
      * @return
      */
     @PatchMapping(value = "/updatePassword")
-    public Result updatePassword(@RequestParam String password){
+    public Result updatePassword(String password){
         //TODO 考虑使用邮箱验证码完成修改密码的校验
-        return Result.success();
+        if (StringUtils.isNotBlank(password)){
+            userService.updatePassword(password);
+            return Result.success();
+        }else {
+            return Result.error("Password cannot be empty.");
+        }
+
     }
 }
