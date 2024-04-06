@@ -56,12 +56,13 @@ public class UserController {
 
     /**
      * 用户登录
-     * @param username
-     * @param password
+     * @param username 前端传入的用户名
+     * @param password 前端传入的密码
      * @return
      */
     @PostMapping(value = "/login")
     public Result login(String username, String password){
+        //根据username找用户信息
         User loginUser = userService.findByUsername(username);
         //检测用户名和密码是否为空
         if (StringUtils.isNotBlank(username) && StringUtils.isNotBlank(password)){
@@ -74,6 +75,8 @@ public class UserController {
                     //将需要携带的信息放入token
                     claims.put("id", loginUser.getId());
                     claims.put("username", loginUser.getUsername());
+                    claims.put("avatarUrl", loginUser.getAvatarUrl());
+                    claims.put("email", loginUser.getEmail());
                     String token = jwt.generateJwt(claims);
                     //返回一个token
                     return Result.success(token);
