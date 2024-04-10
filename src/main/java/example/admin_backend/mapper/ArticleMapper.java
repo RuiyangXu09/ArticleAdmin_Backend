@@ -23,12 +23,12 @@ public interface ArticleMapper {
     Integer countRows();
 
     /**
-     * 分页查询
+     * 分页查询，使用left join关联查询
      * @param startIndex 起始索引
      * @param pageSize 总页码数
      * @return
      */
-    @Select("SELECT * FROM article LIMIT #{startIndex}, #{pageSize}")
+    @Select("SELECT article.*, category.category_name FROM article LEFT JOIN category ON article.category_id = category.id LIMIT #{startIndex}, #{pageSize}")
     List<Article> pageArticleList(Integer startIndex, Integer pageSize);
 
     /**
