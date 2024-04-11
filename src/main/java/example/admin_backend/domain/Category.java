@@ -14,4 +14,5 @@ public class Category {
     private Integer id;
     private String categoryName;
     private Integer createUser;
+    private String username;
 }

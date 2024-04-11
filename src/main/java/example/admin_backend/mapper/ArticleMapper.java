@@ -28,7 +28,11 @@ public interface ArticleMapper {
      * @param pageSize 总页码数
      * @return
      */
-    @Select("SELECT article.*, category.category_name FROM article LEFT JOIN category ON article.category_id = category.id LIMIT #{startIndex}, #{pageSize}")
+    @Select("SELECT article.*, category.category_name, user.username " +
+            "FROM article " +
+            "LEFT JOIN category ON article.category_id = category.id " +
+            "LEFT JOIN user ON article.create_user = user.id " +
+            "LIMIT #{startIndex}, #{pageSize}")
     List<Article> pageArticleList(Integer startIndex, Integer pageSize);
 
     /**

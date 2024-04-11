@@ -19,7 +19,10 @@ public interface CategoryMapper {
      * @param userId 仅查询当前登录id下创建的分类
      * @return
      */
-    @Select("SELECT * FROM category WHERE create_user = #{userId}")
+    @Select("SELECT category.*, user.username " +
+            "FROM category  " +
+            "LEFT JOIN user ON category.create_user = user.id " +
+            "WHERE category.create_user = #{userId}")
     List<Category> getCategoryList(Integer userId);
 
     /**
