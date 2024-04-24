@@ -13,7 +13,7 @@ public interface UserMapper {
      * @param username
      * @return
      */
-    @Select("SELECT * FROM user WHERE username = #{username} ")
+//    @Select("SELECT * FROM user WHERE username = #{username} ")
     User findByUsername(String username);
 
     /**
@@ -23,7 +23,7 @@ public interface UserMapper {
      * @param nickname
      * @param email
      */
-    @Insert("INSERT INTO user(username, password, nickname, email) VALUES (#{username}, #{password}, #{nickname}, #{email})")
+//    @Insert("INSERT INTO user(username, password, nickname, email) VALUES (#{username}, #{password}, #{nickname}, #{email})")
     void register(String username, String password, String nickname, String email);
 
     /**
@@ -31,27 +31,27 @@ public interface UserMapper {
      * @param id
      * @return
      */
-    @Select("SELECT * FROM user WHERE id = #{id}")
+//    @Select("SELECT * FROM user WHERE id = #{id}")
     User userInfoById(Integer id);
 
     /**
      * 更新用户信息
      * @param user
      */
-    @Update("UPDATE user SET nickname = #{nickname}, email = #{email} WHERE id = #{id}")
+//    @Update("UPDATE user SET nickname = #{nickname}, email = #{email} WHERE id = #{id}")
     void updateUser(User user);
 
     /**
      * 更新用户头像
      * @param avatarUrl
      */
-    @Update(("UPDATE user SET avatarUrl = #{avatarUrl} WHERE id = #{id}"))
+//    @Update(("UPDATE user SET avatarUrl = #{avatarUrl} WHERE id = #{id}"))
     void updateAvatar(String avatarUrl, Integer id);
 
     /**
      * 更新用户密码
      * @param password
      */
-    @Update("UPDATE user SET password = #{password} WHERE id = #{id}")
+//    @Update("UPDATE user SET password = #{password} WHERE id = #{id}")
     void updatePassword(String password, Integer id);
 }

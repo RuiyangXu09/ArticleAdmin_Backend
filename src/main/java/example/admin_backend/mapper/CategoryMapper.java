@@ -11,7 +11,6 @@ public interface CategoryMapper {
      * 新增文章分类
      * @param category
      */
-    @Insert("INSERT INTO category(category_name, create_user) VALUES (#{categoryName} , #{createUser})")
     void addCategory(Category category);
 
     /**
@@ -19,10 +18,6 @@ public interface CategoryMapper {
      * @param userId 仅查询当前登录id下创建的分类
      * @return
      */
-    @Select("SELECT category.*, user.username " +
-            "FROM category  " +
-            "LEFT JOIN user ON category.create_user = user.id " +
-            "WHERE category.create_user = #{userId}")
     List<Category> getCategoryList(Integer userId);
 
     /**
@@ -30,16 +25,17 @@ public interface CategoryMapper {
      * @param id
      * @return
      */
-    @Select("SELECT * FROM category WHERE id = #{id}")
     Category getCategoryDetails(Integer id);
 
     /**
      * 更新分类名
      * @param category
      */
-    @Update("UPDATE category SET category_name = #{categoryName} WHERE id = #{id}")
     void updateCategory(Category category);
 
-    @Delete("DELETE FROM category WHERE id = #{id}")
+    /**
+     * 删除分类
+     * @param id
+     */
     void deleteCategory(Integer id);
 }

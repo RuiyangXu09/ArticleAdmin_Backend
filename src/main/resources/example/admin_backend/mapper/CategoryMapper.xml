@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="example.admin_backend.mapper.CategoryMapper">
+<!--    新增文章分类-->
+    <insert id="addCategory">
+        INSERT INTO category(category_name, create_user)
+        VALUES (#{categoryName} , #{createUser})
+    </insert>
+<!--    分类列表查询-->
+    <select id="getCategoryList" resultType="example.admin_backend.domain.Category">
+        SELECT category.*, user.username
+        FROM category
+        LEFT JOIN user ON category.create_user = user.id
+        <where>
+            category.create_user = #{userId}
+        </where>
+    </select>
+<!--    根据id获取分类详情-->
+    <select id="getCategoryDetails" resultType="example.admin_backend.domain.Category">
+        SELECT *
+        FROM category
+        WHERE id = #{id}
+    </select>
+<!--    更新分类名-->
+    <update id="updateCategory">
+        UPDATE category
+        SET category_name = #{categoryName}
+        WHERE id = #{id}
+    </update>
+<!--    删除分类-->
+    <delete id="deleteCategory">
+        DELETE FROM category
+        WHERE id = #{id}
+    </delete>
+</mapper>

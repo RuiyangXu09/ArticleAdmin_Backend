@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="example.admin_backend.mapper.ArticleMapper">
+<!--    新增文章-->
+    <insert id="addArticle">
+        INSERT INTO article(title, summary, cover_img, state, category_id, create_user, create_time, update_time)
+        VALUES (#{title}, #{summary}, #{coverImg}, #{state}, #{categoryId}, #{createUser}, #{createTime}, #{updateTime})
+    </insert>
+<!--    获取数据库中的总记录数-->
+    <select id="countRows" resultType="integer">
+        SELECT COUNT(*)
+        FROM article
+    </select>
+<!--    分页查询，使用left join关联查询-->
+    <select id="pageArticleList" resultType="example.admin_backend.domain.Article">
+        SELECT article.*, category.category_name, user.username
+        FROM article
+        LEFT JOIN category ON article.category_id = category.id
+        LEFT JOIN user ON article.create_user = user.id
+        LIMIT #{startIndex}, #{pageSize}
+    </select>
+<!--    获取文章信息-->
+    <select id="getArticleDetails" resultType="example.admin_backend.domain.Article">
+        SELECT *
+        FROM article
+        <where>
+            id = #{id}
+        </where>
+    </select>
+<!--    修改文章信息-->
+    <update id="updateArticle">
+        UPDATE article
+        SET title = #{title}, summary = #{summary}, cover_img = #{coverImg}, state = #{state}, update_time = #{updateTime}
+        <where>
+            id = #{id}
+        </where>
+    </update>
+<!--    删除文章-->
+    <delete id="deleteArticle">
+        DELETE FROM article
+        <where>
+            id = #{id}
+        </where>
+    </delete>
+</mapper>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="example.admin_backend.mapper.UserMapper">
+<!--    根据用户名查询用户-->
+    <select id="findByUsername" resultType="example.admin_backend.domain.User">
+        SELECT *
+        FROM user
+        <where>
+            username = #{username}
+        </where>
+    </select>
+<!--    注册用户信息-->
+    <insert id="register">
+        INSERT INTO user(username, password, nickname, email)
+        VALUES (#{username}, #{password}, #{nickname}, #{email})
+    </insert>
+<!--    通过id获取用户信息-->
+    <select id="userInfoById" resultType="example.admin_backend.domain.User">
+        SELECT *
+        FROM user
+        WHERE id = #{id}
+    </select>
+<!--    更新用户信息-->
+    <update id="updateUser">
+        UPDATE user
+        SET nickname = #{nickname}, email = #{email}
+        WHERE id = #{id}
+    </update>
+<!--    更新用户头像-->
+    <update id="updateAvatar">
+        UPDATE user
+        SET avatarUrl = #{avatarUrl}
+        WHERE id = #{id}
+    </update>
+<!--    更新用户密码-->
+    <update id="updatePassword">
+        UPDATE user
+        SET password = #{password}
+        WHERE id = #{id}
+    </update>
+</mapper>

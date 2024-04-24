@@ -11,15 +11,12 @@ public interface ArticleMapper {
      * 新增文章
      * @param article
      */
-    @Insert("INSERT INTO article(title, summary, cover_img, state, category_id, create_user, create_time, update_time) " +
-            "VALUES (#{title}, #{summary}, #{coverImg}, #{state}, #{categoryId}, #{createUser}, #{createTime}, #{updateTime})  ")
     void addArticle(Article article);
 
     /**
      * 获取数据库中的总记录数
      * @return
      */
-    @Select("SELECT COUNT(*) FROM article")
     Integer countRows();
 
     /**
@@ -28,11 +25,6 @@ public interface ArticleMapper {
      * @param pageSize 总页码数
      * @return
      */
-    @Select("SELECT article.*, category.category_name, user.username " +
-            "FROM article " +
-            "LEFT JOIN category ON article.category_id = category.id " +
-            "LEFT JOIN user ON article.create_user = user.id " +
-            "LIMIT #{startIndex}, #{pageSize}")
     List<Article> pageArticleList(Integer startIndex, Integer pageSize);
 
     /**
@@ -40,20 +32,17 @@ public interface ArticleMapper {
      * @param id 传入的id
      * @return
      */
-    @Select("SELECT * FROM article WHERE id = #{id}")
     Article getArticleDetails(Integer id);
 
     /**
      * 修改文章信息
      * @param article
      */
-    @Update("UPDATE article SET title = #{title}, summary = #{summary}, cover_img = #{coverImg}, state = #{state}, update_time = #{updateTime} WHERE id = #{id}")
     void updateArticle(Article article);
 
     /**
      * 删除文章
      * @param id
      */
-    @Delete("DELETE FROM article WHERE id = #{id}")
     void deleteArticle(Integer id);
 }
